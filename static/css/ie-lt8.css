@@ -1,0 +1,6 @@
+/* hacks for 6, 7 */
+
+ul#mesta li{
+	float:none;
+	margin:0;
+}

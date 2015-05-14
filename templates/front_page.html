@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div id="featured" class="featured">
+
+		<div>
+			<span class="heading">Najnovšie</span>
+			<ul id="recent">
+				{% for ad in newAds %}
+					<li>
+						<a href="/detail-inzeratu/{{ ad.id }}/">
+							
+							{% if ad.image.0 %}
+							<img src="{{ MEDIA_URL }}{{ ad.image.0 }}"/>
+							{% else %}
+							<img src="{{ MEDIA_URL }}images/ads/content-search-no-image.png"/>
+							{% endif %}
+
+							<span class="description">
+								<strong>{{ ad.title }}</strong> 
+								<span class="city"> {{ ad.city }}</span>
+								<!-- <span class="date"> {{ ad.time_of_publication }} | {{ ad.user }}</span> -->
+							</span>
+
+						</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+
+		<div>
+			<span class="heading">Populárne</span>
+			<ul id="popular">
+				{% for ad in popularAds %}
+					<li>
+						<a href="/detail-inzeratu/{{ ad.id }}/">
+							{% if ad.image.0 %}
+								<img src="{{ MEDIA_URL }}{{ ad.image.0 }}" height="50" width="60"/>
+							{% else %}
+								<img src="{{ MEDIA_URL }}images/ads/content-search-no-image.png" height="50" width="60"/>
+							{% endif %}
+							<strong>{{ ad.title }}</strong>
+							<span class="details">
+								<span class="city"> {{ ad.city }} </span>
+								<!-- <span class="date"> {{ ad.time_of_publication }} | {{ ad.user }}</span> -->
+							</span>
+						</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+
+	</div>
+
+	<div id="advanced_search">
+		<span class="heading">Filtrovanie inzerátov</span>
+		<form name="filter" method="post" action="/vyhladavanie/1/5/?search=">{% csrf_token %}
+			<input type="hidden" name="query" value=""/>
+			<!--
+			<table><tr>
+				<td>
+					<span class="label">
+						<label for="lokalita">Lokalita:</label>
+					</span>
+					<select class="chzn" id="lokalita" name="lokalita">
+						<option value="cela-sr">Celá SR</option>
+						{% for city in formInfo.allCities %}
+							<option value="{{ city.id }}" {% if lokalita == city.id|slugify %} selected="selected" {% endif %} >{{ city.city }}</option>
+						{% endfor %}
+					</select>
+				</td>
+				<td>
+					<span class="label">
+						<label>Typ inzerátu</label>
+					</span>
+					<span class="options">
+						<span>
+							<input type="radio" name="typ" id="vsetky" value="vsetky" {% if typ == "vsetky" or typ == None %} checked {% endif %} />
+							<label for="vsetky">Všetky</label>
+						</span>
+						<span>
+							<input type="radio" name="typ" id="ponuka" value="ponuka" {% if typ == "ponuka" %} checked {% endif %} />
+							<label for="ponuka">Ponuka</label>
+						</span>
+						<span>
+							<input type="radio" name="typ" id="dopyt" value="dopyt" {% if typ == "dopyt" %} checked {% endif %} />
+							<label for="dopyt">Dopyt</label>
+						</span>
+					</span>
+				</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="label">					
+					<label for="kategória">Kategória</label>
+				</span>
+				<select class="chzn" id="kategoria" name="kategoria">
+					<option value="vsetky">Všetky kategórie</option>
+					{% for category in formInfo.allCategories %}
+						<option value="{{ category.id }}" {% if kategoria == category.id|slugify %} selected="selected" {% endif %} >{{ category.category }}</option>
+					{% endfor %}
+				</select>	
+			</td>
+			<td>
+				<span class="label">
+					<label>Ďalšie možnosti</label>
+				</span>
+				<span class="options">
+					<span>
+						<input type="checkbox" name="s_fotkou" id="sfotkou" value="1" {% if s_fotkou == "1" %} checked {% endif %} />
+						<label for="sfotkou">iba inzeráty s fotkou</label>
+					</span>
+				</span>	
+			</td>
+			</tr>
+			</table>
+			-->
+
+			<span class="row">
+				<label for="lokalita">Lokalita:</label>
+				<select class="chzn" id="lokalita" name="lokalita">
+					<option value="cela-sr">Celá SR</option>
+					{% for city in formInfo.allCities %}
+						<option value="{{ city.id }}" {% if lokalita == city.id|slugify %} selected="selected" {% endif %} >{{ city.city }}</option>
+					{% endfor %}
+				</select>
+			</span>
+
+			<span class="row">					
+				<label for="kategória">Kategória</label>
+				<select class="chzn" id="kategoria" name="kategoria">
+					<option value="vsetky">Všetky kategórie</option>
+					{% for category in formInfo.allCategories %}
+						<option value="{{ category.id }}" {% if kategoria == category.id|slugify %} selected="selected" {% endif %} >{{ category.category }}</option>
+					{% endfor %}
+				</select>	
+			</span>
+
+			<span class="row">
+				<label>Typ inzerátu</label>
+				<span class="optgroup">
+					<input type="radio" name="typ" id="vsetky" value="vsetky" {% if typ == "vsetky" or typ == None %} checked {% endif %} />
+					<label for="vsetky">Všetky</label>
+					<input type="radio" name="typ" id="ponuka" value="ponuka" {% if typ == "ponuka" %} checked {% endif %} />
+					<label for="ponuka">Ponuka</label>
+					<input type="radio" name="typ" id="dopyt" value="dopyt" {% if typ == "dopyt" %} checked {% endif %} />
+					<label for="dopyt">Dopyt</label>
+				</span>
+			</span>
+
+			<span class="row">
+				<span class="optgroup">
+					<!-- <label>Ďalšie možnosti</label> -->
+					<input type="checkbox" name="s_fotkou" id="sfotkou" value="1" {% if s_fotkou == "1" %} checked {% endif %} />
+					<label for="sfotkou">iba inzeráty s fotkou</label>
+				</span>
+			</span>	
+		
+			<span class="submit">
+				<input type="submit" class="button green" name="submit" value="Hľadať"/>
+			</span>
+
+		</form>
+	</div>
+
+	<div>
+		<h1>Darujte haraburdy za odvoz!</h1>
+		<h2>Chýba Vám niečo v domácnosti?</h2>
+		<p>Vo Vašom okolí je množstvo ľudí, ktorí majú množstvo vecí, ktoré nepotrebujú. Nový televízor medzi nimi možno nenájdete, no ponuka je napriek tomu široká. Boli by ste prekvapení, čoho všetkého sa ľudia chcú zbaviť!</p>
+		<p>Prostredníctvom týchto stránok si môžete pohodlne prezrieť ponuku a rezervovať si vec, ktorá sa Vám zapáči. Potom si ju stač9 už len zadarmo prevziať!</p>
+
+		<h2>Chcete sa zbaviť nepotrebných vecí?</h2>
+		<p>Určite máte doma nejednu vec, ktorá len zavadzia a zaberá miesto. Nechce sa Vám ju nosiť do bazáru ani písať inzeráty, jej finančná hodnota je pre Vás možno dokonca nepodstatná, jednoducho by bolo najlepšie, keby ste sa jej mohli rýchlo a bez akéhokoľvek úsilia zbaviť.</p>
+		<p>Stačí vyvesiť ponuku na tieto stránky a verte, že sa nájde niekto, kto ju využije, sám si ju od Vás vyzdvihne a bude z nej mať dokonca radosť.</p>
+	</div>
+
+	<div>
+	<span class="heading">Všetky mestá</span>
+	<ul id="mesta">
+		{% for city in cities %}
+			<li><a href="/mesto/{{ city.city_url }}/1/5/">{{ city.city }}</a> ({{ city.count }})</li>
+		{% endfor %}
+	</ul>
+	</div>
+
+
+{% endblock %}

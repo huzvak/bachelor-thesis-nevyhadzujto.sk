@@ -1,0 +1,147 @@
+/* formy su standartne bez tabuliek;
+/* medzery medzi riadkami robi span class=label ktory zdruzuje label s podrobnym popisom
+
+/* tj riadok tvori: 
+<span class=label>
+	<label></label>
+	Dalsi popis k labelu malym pismom
+</span>
+<input/>
+
+/* zlozitejsie casti formu mozu obsahovat tabulku 
+
+/* checkboxy a radio buttony musia byt v span class=options */
+
+form {
+	overflow:hidden;
+	padding-bottom:20px;
+	margin-top:-15px;
+	width:100%;
+}
+
+input, textarea, select {width:50%;}
+
+label{margin-bottom:0.4em; display:block;} /* samostatny label */
+
+span.label{
+	display:block;
+	margin-top:20px;
+	font-size:0.7em;
+	margin-bottom:10px;
+}
+
+span.label label{font-size:2em; margin-bottom:0;} /* label spojeny v spane s malym popisnym textom */
+
+span.submit{width:100%; text-align:right; display:block; margin-top:1em; width:auto;}
+span.submit input{width:auto; padding-left:30px; padding-right:30px;}
+
+span.options input {width:auto;}
+span.options {display:block; overflow:hidden;}
+span.options label{display:inline;}
+span.options span{
+	display:block; float:left;
+	margin-right:0.4em;
+}
+span.options.vert span{float:none;}
+
+
+
+/* -------------- tabulka vo forme ------------------- */
+/* --------------------------------------------------- */
+
+form table{width:100%;}
+form table td{width:50%; vertical-align:top;}
+form table tr td{padding-right:20px;}
+form table tr td:last-child{padding-right:0;}
+
+form table select, form table input, form table textarea{width:100%;}
+form table span.options input, form table input.submit{width:auto;}
+
+/* --------------------------------------------------- */
+
+
+
+/* --------------- skin pre inputy ------------------- */
+/* --------------------------------------------------- */
+
+input, select, textarea {
+	-webkit-transition: width 250ms linear;
+	-moz-transition: width 250ms linear;
+	-o-transition: width 250ms linear;
+	transition: width 250ms linear;
+}
+
+
+
+
+select, textarea, input[type="text"], input[type="password"]{
+	font-family:"Open Sans", "Arial", sans-serif;
+	opacity: 0.9;	
+	padding:5px 8px;
+	outline:none;
+	margin:0;
+}
+
+textarea{
+	resize:none;
+	height:180px;
+}
+
+select, textarea { font-size:1.15em; }
+input[type="text"], input[type="password"]{ font-size:1.3em; }
+
+select:focus, select:active, textarea:focus, textarea:active,
+input[type="text"]:focus, input[type="text"]:active, 
+input[type="password"]:focus, input[type="password"]:active 
+{opacity:1; width:55%;}
+select:hover, textarea:hover,
+input[type="text"]:hover, input[type="password"]:hover{opacity:1;}
+
+form table select:focus, form table select:active, form table input:focus, form table input:active,
+form table textarea:focus, form table textarea:active{width:100%;}
+
+span.options span{
+	padding:0.2em 0.5em 0.2em 0.3em;
+	border-radius:2px;
+}
+
+span.options span:hover{
+	background:#C02309;
+	color:#FFF;
+}
+
+/* --------------------------------------------------- */
+
+
+
+
+
+
+
+/* specialne formy */
+
+div#photo_upload_section{
+	margin-top:1em;
+	margin-bottom:1em;
+}
+
+#sidebar form{padding:0;}
+input#fulltext{
+	padding-right:45px;
+	width:242px; border:2px solid #C02309;
+	background: #FFF url('../cssimg/icon-search.png') no-repeat;
+	background-position:264px 7px;
+}
+
+#login input{
+	width:90%;
+}
+
+#login input:focus, #login input:active{
+	width:100%;
+}
+
+#login input.submit{
+	width:auto;
+}
+

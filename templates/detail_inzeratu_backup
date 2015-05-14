@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div id="inzerat_profil">
+
+		<span id="addthis">
+			<span>Zdieľajte inzerát:</span>
+			<!-- AddThis Button BEGIN -->
+			<div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+			<a class="addthis_button_facebook"></a>
+			<a class="addthis_button_twitter"></a>
+			<a class="addthis_button_google"></a>
+			<a class="addthis_button_email"></a>
+			<a class="addthis_button_favorites"></a>
+			<a class="addthis_counter addthis_bubble_style"></a>
+			</div>
+			<!-- AddThis Button END -->
+		</span>
+
+		<h1>{{ ad.title }}</h1>
+		<div id="kde_som">
+			Tu bude drobčekova navigácia.
+		</div>
+
+		<div id="photos">
+			{% if images %}
+				{% for image in images %}
+					{% if forloop.first %}
+						<a href="{{ MEDIA_URL }}{{ image.image }}"><img id="main" src="{{ MEDIA_URL }}{{ image.image }}"/></a>
+					{% else %}
+						<a href="{{ MEDIA_URL }}{{ image.image }}"><img src="{{ MEDIA_URL }}{{ image.image }}"/></a>
+					{% endif %}
+				{% endfor %}
+			{% else %}
+				<img id="main" src="{{ MEDIA_URL }}images/ads/content-search-no-image.png"/>
+			{% endif %}
+		</div>
+
+		<div id="text">
+			<span id="nadpis">{{ ad.title }}</span>
+
+			<p>{{ ad.text_of_ad }}</p>
+
+			<span class="info" id="city">
+				<img class="icon" src="{{ MEDIA_URL }}images/ads/icon-placeholder.png"/>
+				Mesto
+				<span><a href="/mesto/{{ city.city_url }}/1/5/">{{ ad.city }}</a></span>
+			</span>
+
+			<span class="info" id="categ">
+				<img class="icon" src="{{ MEDIA_URL }}images/ads/icon-placeholder.png"/>
+				Kategória
+				<span><a href="/kategoria/{{ category.category_url }}/1/5/">{{ ad.category }}</a></span>
+			</span>
+
+			<span class="info" id="auth">
+				<img class="icon" src="{{ MEDIA_URL }}images/ads/icon-placeholder.png"/>
+				Vložené
+				<span>{{ ad.time_of_publication }} <a href="/uzivatel/{{ ad.user }}/">{{ ad.user }}</a></span>
+			</span>
+
+			<span class="info" id="address">
+				<img class="icon" src="{{ MEDIA_URL }}images/ads/icon-placeholder.png"/>
+				Adresa
+				<span>{{ ad.address }}</span>
+			</span>
+
+			{% if user.is_authenticated %}
+				<span class="info" id="contact">
+					<img class="icon" src="{{ MEDIA_URL }}images/ads/icon-placeholder.png"/>
+					Kontakt
+					<span> <a href="mailto:{{ ad.user.email }}"> {{ ad.user.email }} </a></span>
+				</span>
+			
+			
+				{% if ad.reservation_id == None and set_registration %}
+					<div id="status">
+						<img class="icon" src="{{ MEDIA_URL }}images/ads/icon-placeholder.png"/>
+						Túto vec si zatiaľ nikto nerezervoval.
+						<a href="/rezervovat/{{ ad.id }}/" id="reserve">Rezervovať</a>
+					</div>
+				{% else %} {% if ad.reservation_id and set_registration %}
+					<div id="status">
+						<img class="icon" src="{{ MEDIA_URL }}images/ads/icon-placeholder.png"/>
+						Zarezervované užívateľom <a href="mailto:{{ reservated_by.email }}">{{ reservated_by }}</a> <br \>
+						Rezervácia vyprší za {{ remaining_time.hours }}h {{ remaining_time.minutes }}m {{ remaining_time.seconds }}s <br />
+						Po vypršaní je možné vec opäť zarezervovať
+					</div>
+				{% else %}
+					<div id="status">
+						<img class="icon" src="{{ MEDIA_URL }}images/ads/icon-placeholder.png"/>
+						Autor inzerátu nepovolil možnosť rezervovácie. Musíte ho teda kontaktovať <a href="mailto:{{ ad.user.email }}">e-mailom</a>.
+					</div>
+				{% endif %} {% endif %}
+			{% else %}
+				<div id="status">
+					<img class="icon" src="{{ MEDIA_URL }}images/ads/icon-placeholder.png"/>
+					<strong>Ak si chcete danú vec zarezervovať, musíte sa najprv prihlásiť.</strong>
+				</div>
+			{% endif %}
+
+			{% if user.is_authenticated and set_inactive %}
+				{% if messages %}
+					{% for message in messages %}
+						<p>{{ message }}<br /><br /></p>
+					{% endfor %}
+				{% endif %}
+
+				{% if ad.reservation_id != None %}
+					<div id="status">
+						<img class="icon" src="{{ MEDIA_URL }}images/ads/icon-placeholder.png"/>
+						Túto vec si zarezervoval užívateľ: <a href="/uzivatel/{{ reservated_by.username }}/">
+						{{ reservated_by.username }}</a>
+					</div>
+				{% endif %}
+
+				<div id="status">
+					<img class="icon" src="{{ MEDIA_URL }}images/ads/icon-placeholder.png"/>
+					{% if ad.active %}
+						Inzerát je aktívny <br />
+						<a href="/zmenit-stav/{{ ad.id }}/ " id="deactivate">Deaktivovať inzerát</a>
+					{% else %}
+						Inzerát je neaktívny <br />
+						<a href="/zmenit-stav/{{ ad.id }}/ " id="activate">Aktivovať inzerát</a>
+					{% endif %}
+				</div>
+			{% endif %}
+			
+			<!--
+			<script type="text/javascript"
+      			src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDD7DS3B_hS3Q-9245e2C3AuApm2ujf1ME&sensor=false">
+    		</script>
+    		-->
+
+    		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDD7DS3B_hS3Q-9245e2C3AuApm2ujf1ME&sensor=false"
+  				type="text/javascript"></script>
+
+			Tu bude mapa!
+			{{ ad.latitude }} a {{ ad.longitude }}
+
+			{{ map_string|safe }}
+
+			<div id="pokus" name="pokus">
+			</div>
+
+		</div>
+
+		<div id="mapa" name="mapa">
+			<!--
+			{% if ad.latitude != 0 or ad.longitude != 0 %}
+			Tu bude mapa!
+			{{ ad.latitude }} a {{ ad.longitude }}
+
+			
+			<script type="text/javascript">
+	    		
+        			var mapOptions = {
+          				center: new google.maps.LatLng(49.0755751, 20.1433596),
+          				zoom: 17,
+          				mapTypeId: google.maps.MapTypeId.HYBRID
+        			};
+        			var map = new google.maps.Map(document.getElementById("mapa"),
+            		mapOptions);
+
+        			var marker = new google.maps.Marker({
+            		position: new google.maps.LatLng(49.0755751, 20.1433596), 
+            		map: map,
+            		title:"Darujem potrhaný stan"
+            		});
+      			
+    		</script>
+    		-->
+<!--
+    		<script type="text/javascript">
+        
+            	var myLatlng = new google.maps.LatLng( {{ ad.latitude }}, {{ ad.longitude }} );
+            	var myOptions = {
+            	zoom: 17,
+            	center: myLatlng,
+            	mapTypeId: google.maps.MapTypeId.HYBRID
+        	}
+        	var map = new google.maps.Map(document.getElementById("mapa"), myOptions);
+    
+        	var marker = new google.maps.Marker({
+            position: myLatlng, 
+            map: map,
+            title:"{{ ad.title }}"
+        	});   
+    
+    		</script>
+-->
+			{% endif %}
+		</div>
+
+		<div id="inzerat_navigation">
+			{% if previousAd %}
+				<a is="prev" class="button purple" href="/detail-inzeratu/{{ previousAd.id }}/">&lt; Predchádzajúci</a>
+			{% else %}
+				<div is="prev" class="button purple">Starší inzerát neexistuje</div>
+			{% endif %}
+			{% if nextAd %}
+				<a id="next" class="button purple" href="/detail-inzeratu/{{ nextAd.id }}/">Nasledujúci &gt;</a>
+			{% else %}
+				<div id="next" class="button purple">Novší inzerát neexistuje</div>
+			{% endif %}
+		</div>
+
+	</div>
+
+	<div id="i_forum">
+		<span class="heading">Diskusia k inzerátu</span>
+		<p>
+		<div class="fb-comments" data-href="https://bc.nevyhadzujto.sk/detail-inzeratu/{{ ad.id }}/" data-num-posts="10" data-width="600"></div>
+		</p>
+	</div>
+
+
+{% endblock %}

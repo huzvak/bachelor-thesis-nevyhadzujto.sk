@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<h1>{{ info_for_template.title2|default:"Výsledky vyhľadávania" }}</h1>
+
+	<div id="kde_som">
+		<a href="/">Domov</a> >> <a href="{{ info_for_template.crumbs }}">{{ info_for_template.crumbs_text }}</a>
+	</div>
+
+	{% if info_for_template.crumbs_text != "Novinky" or info_for_template.ads_count != 0 %}
+	<div id="search_filter">
+		
+		<form name="filter" method="post" action="{{ info_for_template.search_form }}">{% csrf_token %}
+
+			<input type="hidden" name="query" value=""/>
+
+			<select class="chzn" id="lokalita" name="lokalita">
+			<option value="cela-sr">Celá SR</option>
+				{% for city in formInfo.allCities %}
+					<option value="{{ city.id }}" {% if lokalita == city.id|slugify %} selected="selected" {% endif %} >{{ city.city }}</option>
+				{% endfor %}
+			</select>
+
+			<select class="chzn" id="kategoria" name="kategoria">
+				<option value="vsetky">Všetky kategórie</option>
+				{% for category in formInfo.allCategories %}
+					<option value="{{ category.id }}" {% if kategoria == category.id|slugify %} selected="selected" {% endif %} >{{ category.category }}</option>
+				{% endfor %}
+			</select>	
+
+			<span class="options">
+				<span>
+					<input type="radio" name="typ" id="vsetky" value="vsetky" {% if typ == "vsetky" or typ == None %} checked {% endif %} />
+					<label for="vsetky">Všetky</label>
+				</span>
+				<span>
+					<input type="radio" name="typ" id="ponuka" value="ponuka" {% if typ == "ponuka" %} checked {% endif %} />
+					<label for="ponuka">Ponuka</label>
+				</span>
+				<span>
+					<input type="radio" name="typ" id="dopyt" value="dopyt" {% if typ == "dopyt" %} checked {% endif %} />
+					<label for="dopyt">Dopyt</label>
+				</span>
+			</span>
+
+			<span class="options">
+				<span>
+					<input type="checkbox" name="s_fotkou" id="sfotkou" value="1" {% if s_fotkou == "1" %} checked {% endif %} />
+					<label for="sfotkou">len s fotkou</label>
+				</span>
+			</span>	
+
+		</form>	</div>
+		{% endif %}
+
+
+	<div id="results" class="nopadding">
+
+		{% if info_for_template.ads_count != 0 %}
+		{% for ad in ads.object_list %}
+			{% if info_for_template.title2 == "Novinky na NevyhadzujTo.sk" %}
+			<a href="/detail-novinky/{{ ad.title_url }}/">
+			{% else %}
+			<a href="/detail-inzeratu/{{ ad.id }}/">
+			{% endif %}
+				<div class="inzerat">
+				<!-- <img src="{{ inzerat.img }}"/> -->
+				{% if info_for_template.crumbs_text == "Novinky" %}
+				{% else %}
+					{% if ad.image.0 %}
+					<img src="{{ MEDIA_URL }}{{ ad.image.0 }}" height="150" width="200"/>
+					{% else %}
+					<img src="{{ MEDIA_URL }}images/ads/content-search-no-image.png"/>
+					{% endif %}
+				{% endif %}
+				<strong>{{ ad.title }}</strong>
+				{{ ad.text_of_ad|truncatewords_html:20 }}
+				<span class="bottom">
+					<span class="location">{{ ad.city }}</span>
+					<span href="#" class="time">{{ ad.time_of_publication }}</span>
+				</span>
+				</div>
+			</a>
+		{% endfor %}
+		{% else %}
+			<font color="red"><strong>Neboli nájdené žiadne inzeráty splňajúce zadané kritéria</strong></font>
+		{% endif %}
+	</div>
+
+	{% if info_for_template.ads_count != 0 %}
+	<div id="pagination">
+		<div id="pages">
+			Strana:
+			<span class="buttons">
+				{% if ads.number >= 3 %}
+					<a href="{{ info_for_template.nav_first }}">1..</a>
+				{% endif %}
+
+				{% if ads.has_previous %}
+					<a href="{{ info_for_template.nav_prev }}">{{ ads.previous_page_number }} </a>
+				{% endif %}
+
+				<a class="current" href="{{ info_for_template.nav_current }}">{{ ads.number }}</a>
+				
+				{% if ads.has_next %}
+					<a href="{{ info_for_template.nav_next }}"> {{ ads.next_page_number }}</a>
+				{% endif %}
+				{% if ads.paginator.num_pages > ads.next_page_number %}
+					<a href="{{ info_for_template.nav_last }}">..{{ ads.paginator.num_pages }}</a>
+				{% endif %}
+			</span>
+		</div>
+
+		<div id="number">
+			Počet výsledkov na stranu:
+			<span class="buttons">
+				<a {% if page_size == 5 %} class="current" {% endif %} href="{{ info_for_template.five }}">5</a>
+				<a {% if page_size == 10 %} class="current" {% endif %} href="{{ info_for_template.ten }}">10</a>
+				<a {% if page_size == 25 %} class="current" {% endif %} href="{{ info_for_template.twenty_five }}">25</a>
+			</span>
+		</div>
+	</div>
+	{% endif %}
+
+	<div>
+	<span class="heading">Všetky mestá</span>
+	<ul id="mesta">
+		{% for city in cities %}
+			<li><a href="/mesto/{{ city.city_url }}/1/5/">{{ city.city }}</a> ({{ city.count }})</li>
+		{% endfor %}
+	</ul>
+	</div>
+
+
+
+{% endblock %}

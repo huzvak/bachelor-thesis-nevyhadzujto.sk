@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+	<div>
+		
+	<h1>{{ page_info.title }}</h1>
+		<div id="kde_som">
+			<a href="/">Domov</a> >> <a href="/registracia/">Registrácia nového užívateľa</a>
+		</div>
+
+		<form name="{{ page_info.form_name }}" method="POST" action="{{ page_info.form_action }}">{% csrf_token %}
+		
+		{% include "form.html" %}
+
+		{% if page_info.page %}
+			<span class="row">
+				<label>Podmienky použitia</label>
+				<span class="sublabel">
+					Registráciou na týchto stránkach sa zaväzujete k dodržiavaniu jej <a href="#">Podmienok použitia</a>.
+				</span>
+				<span class="optgroup">
+					<input type="checkbox" id="tos" name="tos" value="1">
+					<label for="tos">Súhlasím s podmienkami použitia</label>
+				</span>
+			</span>
+		{% endif %}
+
+		<span class="row">
+			<input type="submit" name="submit" class="button green submit" value="Vytvoriť účet"/>
+		</span>
+
+		</form>
+
+	</div>  <!-- CONTENT -->
+
+{% endblock %}

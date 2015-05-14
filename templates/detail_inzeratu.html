@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<div id="inzerat_profil">
+
+		<span id="addthis">
+			<span>Zdieľajte inzerát:</span>
+			<!-- AddThis Button BEGIN -->
+			<div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+			<a class="addthis_button_facebook"></a>
+			<a class="addthis_button_twitter"></a>
+			<a class="addthis_button_google"></a>
+			<a class="addthis_button_email"></a>
+			<a class="addthis_button_favorites"></a>
+			<a class="addthis_counter addthis_bubble_style"></a>
+			</div>
+			<!-- AddThis Button END -->
+		</span>
+
+		<h1>{{ ad.title }}</h1>
+		<div id="kde_som">
+			<a href="/">Domov</a> >> <a href="#">Detail inzerátu: {{ ad.title }}</a>
+		</div>
+
+		<div id="photos">
+			{% if images %}
+				{% for image in images %}
+					{% if forloop.first %}
+						<a href="{{ MEDIA_URL }}{{ image.image }}"><img id="main" src="{{ MEDIA_URL }}{{ image.image }}"/></a>
+					{% else %}
+						<a href="{{ MEDIA_URL }}{{ image.image }}"><img src="{{ MEDIA_URL }}{{ image.image }}"/></a>
+					{% endif %}
+				{% endfor %}
+			{% else %}
+				<img id="main" src="{{ MEDIA_URL }}images/ads/content-search-no-image.png"/>
+			{% endif %}
+		</div>
+
+		<div id="text">
+			<span id="nadpis">{{ ad.title }}</span>
+
+			<p>{{ ad.text_of_ad }}</p>
+
+			<span class="info" id="city">
+				Mesto
+				<span><a href="/mesto/{{ city.city_url }}/1/5/">{{ ad.city }}</a></span>
+			</span>
+
+			<span class="info" id="categ">
+				Kategória
+				<span><a href="/kategoria/{{ category.category_url }}/1/5/">{{ ad.category }}</a></span>
+			</span>
+
+			<span class="info" id="auth">
+				Vložené
+				<span>{{ ad.time_of_publication }} <a href="/uzivatel/{{ ad.user }}/">{{ ad.user }}</a></span>
+			</span>
+
+			<span class="info" id="address">
+				Adresa
+				<span>{{ ad.address }}</span>
+			</span>
+
+			{% if user.is_authenticated %}
+					Kontakt
+					<span> <a href="mailto:{{ ad.user.email }}"> {{ ad.user.email }} </a></span>
+				</span>
+
+				{% if ad.reservation_id == None and set_registration %}
+					<div id="status">
+						Túto vec si zatiaľ nikto nerezervoval.
+						<a href="/rezervovat/{{ ad.id }}/" id="reserve">Rezervovať</a>
+					</div>
+				{% else %} {% if ad.reservation_id and set_registration %}
+					<div id="status">
+						Zarezervované užívateľom <a href="mailto:{{ reservated_by.email }}">{{ reservated_by }}</a> <br \>
+						Rezervácia vyprší za {{ remaining_time.hours }}h {{ remaining_time.minutes }}m {{ remaining_time.seconds }}s <br />
+						Po vypršaní je možné vec opäť zarezervovať
+					</div>
+				{% else %}
+					<div id="status">
+						Autor inzerátu nepovolil možnosť rezervácie. Musíte ho teda kontaktovať <a href="mailto:{{ ad.user.email }}">e-mailom</a>. Alebo ste sám autorom inzerátu.
+					</div>
+				{% endif %} {% endif %}
+			{% else %}
+				<div id="status" class="locked">
+					<strong>Ak si chcete túto vec zarezervovať, musíte sa najprv prihlásiť.</strong>
+				</div>
+			{% endif %}
+
+			{% if user.is_authenticated and set_inactive %}
+				{% if messages %}
+					{% for message in messages %}
+						<p>{{ message }}<br /><br /></p>
+					{% endfor %}
+				{% endif %}
+
+				{% if ad.reservation_id != None %}
+					<div id="status">
+						<img class="icon" src="{{ MEDIA_URL }}images/ads/icon-placeholder.png"/>
+						Túto vec si zarezervoval užívateľ: <a href="/uzivatel/{{ reservated_by.username }}/">
+						{{ reservated_by.username }}</a>
+					</div>
+				{% endif %}
+
+				<div id="status">
+					<img class="icon" src="{{ MEDIA_URL }}images/ads/icon-placeholder.png"/>
+					{% if ad.active %}
+						Inzerát je aktívny <br />
+						<a href="/zmenit-stav/{{ ad.id }}/ " id="deactivate">Deaktivovať inzerát</a>
+					{% else %}
+						Inzerát je neaktívny <br />
+						<a href="/zmenit-stav/{{ ad.id }}/ " id="activate">Aktivovať inzerát</a>
+					{% endif %}
+				</div>
+			{% endif %}
+			
+	</div>
+
+		
+	<h2>Lokalita</h2>
+
+	<div id="mapa" name="mapa">
+
+			{{ form.map }}
+			<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js"></script>
+			<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+			<script type="text/javascript" src="/static/gmapi/js/jquery.gmapi.js"></script>
+        	        <script type="text/javascript">
+                	        window.myobj = {
+                        	        markerOver: function() { this.openInfoWindow(); },
+                                	markerOut: function() { this.closeInfoWindow(); }
+                        	};
+                	</script>
+	</div>
+
+		<div id="inzerat_navigation">
+			{% if previousAd %}
+				<a is="prev" class="button purple" href="/detail-inzeratu/{{ previousAd.id }}/">&lt; Predchádzajúci</a>
+			{% else %}
+				<div is="prev" class="button purple">Starší inzerát neexistuje</div>
+			{% endif %}
+			{% if nextAd %}
+				<a id="next" class="button purple" href="/detail-inzeratu/{{ nextAd.id }}/">Nasledujúci &gt;</a>
+			{% else %}
+				<div id="next" class="button purple">Novší inzerát neexistuje</div>
+			{% endif %}
+		</div>
+
+	<div id="i_forum">
+		<h2>Diskusia k inzerátu</h2>
+		<p>
+		<div class="fb-comments" data-href="https://bc.nevyhadzujto.sk/detail-inzeratu/{{ ad.id }}/" data-num-posts="10" data-width="600"></div>
+		</p>
+	</div>
+
+
+{% endblock %}

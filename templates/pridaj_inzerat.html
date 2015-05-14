@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load thumbnail %}
+
+{% block content %}
+	<div id="content">
+
+				
+		<h1>Pridať nový inzerát</h1>
+		<div id="kde_som">
+			<a href="/">Domov</a> >> <a href="/pridat-inzerat/">Pridanie nového inzerátu</a>
+		</div>
+
+		<form name="{{ page_info.form_name }}" method="POST" action="{{ page_info.form_action }}" enctype="multipart/form-data">{% csrf_token %}
+		{% include "form.html" %}
+		<span class="submit">
+			<input type="submit" name="submit" class="button green submit" value="Vložiť inzerát"/>
+		</span>
+
+		</form>
+		
+
+	</div>  <!-- CONTENT -->
+
+{% endblock %}

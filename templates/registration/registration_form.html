@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+	<h1>Registrácia nového uživateľa</h1>
+		<div id="kde_som">
+			Tu bude drobčekova navigácia.
+		</div>
+<!--
+		<form name="registration" method="POST" action="/ucet/registracia/">{% csrf_token %}
+		<span class="label">
+			<label for="meno">Vaše užívateľské meno</label>
+		</span>
+		<input id="meno" type="text" name="username"/>
+
+		<span class="label">
+			<label for="email">E-mailová adresa</label>
+		</span>
+		<input id="email" type="text" name="email"/>
+
+		<span class="label">
+			<label for="meno">Meno</label>
+		</span>
+		<input id="meno" type="text" name="firstname"/>
+
+		<span class="label">
+			<label for="meno">Priezvisko</label>
+		</span>
+		<input id="meno" type="text" name="lastname"/>
+
+		<span class="label">
+			<label for="meno">Telefón</label>
+			Mobil alebo pevná linka
+		</span>
+		<input id="meno" type="text" name="phone"/>
+
+		<span class="label">
+			<label for="meno">Heslo</label>
+			Heslo by malo obsahovať aspoň 6 znakov
+		</span>
+		<input id="meno" type="text" name="password1"/>
+
+		<span class="label">
+			<label for="meno">Heslo znova</label>
+			Zadajte svoje heslo znova pre kontrolu
+		</span>
+		<input id="meno" type="text" name="password2"/>
+
+		<span class="label"><label>Podmienky použitia</label></span>
+		<span class="options">
+				Registráciou na týchto stránkach sa zaväzujete<br/>k dodržiavaniu jej <a href="#">Podmienok použitia</a>.
+				<br/><br/>
+				<span><input type="checkbox" id="tos" name="tos" value="1">
+					<label for="tos">Súhlasím s podmienkami použitia</label>
+				</span>
+		</span>
+
+		<span class="submit">
+			<input type="submit" name="submit" class="button green submit" value="Vytvoriť účet"/>
+		</span>
+
+		</form>
+
+-->
+
+<form method="post" action="/ucet/registracia/">{% csrf_token %}
+		{% for f in form %}
+			{% if f.errors %}
+  				<tr>
+  					<td colspan="2">{{ f.errors }}</td>
+  				</tr>
+  			{% endif %}
+
+  			<span class="label"><label>{{ f.label }}</label></span>
+  			{{ f }}
+  			
+  			<!--
+  			<tr>
+	  			<th{% if f.field.required %} class="required"{% endif %}>
+  					<label for="id_{{ f.name }}">{{ f.label }}</label>
+  				</th>
+  				<td>{{ f }}</td>
+  			</tr>
+  			-->
+
+  			{% if f.help_text %}
+  				<tr>
+  					<td></td>
+  					<td class="help_text">{{ f.help_text }}</td>
+  				</tr>
+  			{% endif %}
+		{% endfor %}
+
+		<span class="submit">
+			<input type="submit" name="submit" class="button green submit" value="Vytvoriť účet"/>
+		</span>
+	</form>
+
+	</div>  <!-- CONTENT -->
+
+{% endblock %}

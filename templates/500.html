@@ -1,0 +1,7 @@
+{% load i18n %}
+
+{% block content %}
+<h1>{% block title %}{% trans "Chyba" %} 500{% endblock %}</h1>
+
+<p>{% trans "Ospravedlňujeme sa, ale v aplikácii došlo k neočakávanej chybe. Zároveň bol odoslaný upozorňujúci e-mail administrátorovi. Problém sa pokúsime čo najskôr opraviť." %}</p>
+{% endblock %}

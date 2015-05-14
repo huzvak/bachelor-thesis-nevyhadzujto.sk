@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns:fb="https://ogp.me/ns/fb#">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<title>{{ info_for_template.title|default:"NevyhadzujTo.sk - prečo za veci platiť ak ich môžete mať zadarmo?!" }}</title>
+
+	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/style.css"/>
+	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/jnotify.css"/>
+	<!-- <link rel="stylesheet" type="text/css" href="css/debug.css"/> -->
+
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="mini_photo_upload.css"/>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="{{ MEDIA_URL }}js/jnotify.min.js"></script>
+
+	<!-- 
+	<link href="{{ MEDIA_URL }}headsupgrid/hugrid.css" type="text/css" rel="stylesheet" />
+	<script src="{{ MEDIA_URL }}headsupgrid/hugrid.js"></script>
+	<script type="text/javascript">
+	    $(document).ready(function() {
+	        pageUnits = 'px';
+	        colUnits = 'px';
+	        pagewidth = 940;
+	        columns = 12;
+	        columnwidth = 60;
+	        gutterwidth = 20;
+	        pagetopmargin = 486;
+	        rowheight = 13;
+	        gridonload = 'off';
+	        makehugrid();
+	        setgridonload();
+	    });
+	</script>
+	-->
+
+	<script type="text/javascript">
+		// AddThis Social Widget
+	    var addthis_config = {"data_track_clickback":true};
+	</script>
+	<script type="text/javascript" src="https://s7.addthis.com/js/250/addthis_widget.js"></script>
+
+	<!--[if lte IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<!--[if lt IE 9]>
+	<link rel="stylesheet" type="text/css" href="css/ie-lt9.css"/>
+	<![endif]-->
+	<!--[if lt IE 8]>
+	<link rel="stylesheet" type="text/css" href="css/ie-lt8.css"/>
+	<![endif]-->
+	<!--[if lt IE 7]>
+	<link rel="stylesheet" type="text/css" href="css/ie-lt7.css"/>
+	<![endif]-->
+</head>
+<body>
+
+<!-- fb LIKE BOX javascript -->
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+	<div id="wrapper">
+
+		<header>
+
+			<div id="all">
+
+				{% if user.is_authenticated %}
+					<div id="logged">
+						<span id="uin"> {{ user }}</span>
+						<ul id="user_menu">
+							<li><a href="/prihlaseny-uzivatel/{{ user.username }}/1/10/">Moje inzeráty</a></li>
+							<li><a href="/nastavenia/">Nastavenia</a></li>
+							<li id="logout"><a href="/odhlas-ma/">Odhlásiť sa</a></li>
+						</ul>
+					</div>
+				{% else %}
+
+					<div id="login">
+						<form name="login" method="POST" action="/prihlas-ma/">{% csrf_token %}
+						<input placeholder="Vaše užívateľské meno" name="username" type="text" />
+						<input placeholder="Heslo" name="password" type="password" />
+						<input type="hidden" name="login" value="1" />
+						<input type="submit" name="submit" class="button green submit" value="Prihlásiť sa"/>
+						</form>
+						Ešte nemáte svoj účet?<br/>
+						Tak sa <a href="/registracia/">zaregistrujte</a>!
+					</div>
+				{% endif %}
+				
+				<a href="/" id="home"></a>
+				<div><a href="/pridat-inzerat/" class="button red">Pridať inzerát</a></div>
+
+				<div class="featured" id="first">
+
+				<div class="hand hand1"></div>
+				<div class="hand hand2"></div>
+				<a href="/">
+				<img src="{{ MEDIA_URL }}images/ads/banner2.jpg"/>
+				Sada príveskov na kľúče v rôznych farbách<br/>
+				<span class="nevyhadzuj">Nevyhadzuj to!</span>
+				</a>
+				</div>
+				
+				<div class="featured" id="second">
+				<div class="hand hand1"></div>
+				<div class="hand hand2"></div>
+				<a href="/">
+				<img src="{{ MEDIA_URL }}images/ads/banner2.jpg"/>
+				Sada príveskov na kľúče v rôznych farbách<br/>
+				<span class="nevyhadzuj">Nevyhadzuj to!</span>
+				</a>
+				</div>		
+
+			</div>
+			
+		</header>
+
+		<div id="separator">
+			<div>
+				<span>
+					<em>{{ countInfo.activeAds }}</em> aktívnych inzerátov 
+				</span>
+				<span>
+					<em>{{ countInfo.allAds }}</em> celkových inzerátov
+				</span>
+				<span>
+					<em>{{ countInfo.allUsers }}</em> registrovanách uživateľov
+				</span>
+			</div>
+		</div>
+
+		<div id="container">
+
+			<div id="sidebar">
+
+				<div>
+					<form name="fulltext" method="GET" action="/vyhladavanie/1/5/"/>
+						<input type="text" name="search" id="fulltext" placeholder="Hľadať v inzerátoch..." 
+							value="{% if search %}{{ search }}{% endif %}" />
+							<input type="hidden" name="s" value=1 />
+					</form>
+				</div>
+
+				<div>
+					<a href="#" class="banner"><img src="{{ MEDIA_URL }}images/ads/banner1.jpg" /></a>
+				</div>
+
+				<div id="news">
+					<span class="heading"><a href="/novinky/">Novinky</a></span>
+					<ul>
+
+						{% for new in recentNews %}
+							<a href="/detail-novinky/{{ new.title_url }}/">
+								<li>
+									<span class="date">{{ new.time_of_publication }}</span> {{ new.title }}
+								</li>
+							</a>
+						{% endfor %}
+					</ul>
+				</div>
+
+
+				<div>
+					<a href="#" class="banner"><img src="{{ MEDIA_URL }}images/ads/banner2.jpg" /></a>
+				</div>
+
+				<div id="fblike">
+					<fb:like-box href="https://www.facebook.com/NajvyhodnejsieZlavy" width="300" show_faces="true" stream="false" header="true"></fb:like-box>
+				</div>
+
+				<div id="forum">
+				</div>
+
+			</div> <!-- END OF SIDEBAR -->
+		
+			<div id="main">			
+				{% block content %}
+				{% endblock %}
+			</div>
+		
+		</div> <!--container -->
+
+		<footer>
+			<div>
+			<span class="heading">Naše ďalšie projekty</span>
+			<dl id="projekty">
+				<dt><a href="http://www.najvyhodnejsiezlavy.sk" target="_blank">NajvyhodnejsieZlavy.sk</a></dt>
+				<dd>zľavový agregátor, ktorý vám denne prináša prehľad tých najlepších zliav na Slovensku</dd>
+				<dt><a href="http://www.hitovky.sk" target="_blank">Hitovky.sk</a></dt>
+				<dd>Potešte svojich známych originálnymi a štýlovými darčekmi ako Jelly hodinky</dd>
+				<dt><a href="http://www.funes.sk" target="_blank">Funes.sk</a></dt>
+				<dd>Nielen cyklistické ale aj iné športové potreby. K tomu profesionálny servis a rady skúsených profesionálov.</dd>
+			</dl>
+			Think IT, 2012
+			</div>
+		</footer>
+
+	</div> <!-- wrapper -->
+
+
+{% if messages %}
+	{% for message in messages %}
+		<script>
+			jNotify(
+				'{{ message }}', {
+			    	autoHide : true, // added in v2.0
+			    	TimeShown : 5000,
+			    	HorizontalPosition : 'center',
+			    	onCompleted : function() {
+			    		// alert('jNofity is completed !');
+			    	}
+				}
+			);
+		</script>
+	{% endfor %}
+{% endif %}
+
+<script> // formulare
+
+	$(document).ready(function(){
+
+		$('form[name="filter"]').change(function(){
+			$(this).submit();
+		});
+
+		$('form').children('span.row').children('input').focus(function(){
+			if($(this).parent().hasClass('error')==false) {
+				$(this).parent().children('span.hint').fadeIn();
+			}
+		});
+
+		$('form').children('span.row').children('input').blur(function(){
+			if($(this).parent().hasClass('error')==false) {
+				$(this).parent().children('span.hint').fadeOut();
+			}
+		});
+
+	});
+
+</script>
+
+</body>
+</html>

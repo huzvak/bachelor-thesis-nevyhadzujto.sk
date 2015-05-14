@@ -1,0 +1,11 @@
+/* hacks for 6 */
+
+#featured a {
+	height:82px;
+	cursor:pointer;
+}
+
+form{
+	/* form width:100% robi v IE6 problem ; */
+	width:400px;
+}

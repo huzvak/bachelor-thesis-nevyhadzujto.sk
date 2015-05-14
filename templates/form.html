@@ -1,0 +1,15 @@
+{% for f in form %}
+  
+  <span class="row{% if f.errors %} error{% endif %}">     
+
+      {% if f.help_text %}<span class="hint">{{ f.help_text }}</span>{% endif %}
+
+      {% if f.errors %}<span class="errormsg">{{ f.errors }}</span>{% endif %}
+
+      <label for="id_{{ f.name }}">{{ f.label }} </label>
+           
+	  {{ f }}
+
+  </span>
+
+{% endfor %}

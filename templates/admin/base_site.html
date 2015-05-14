@@ -1,0 +1,24 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+
+{% block title %}{{ title }} | {% trans 'Django site admin' %}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">{% trans 'Django administration' %}
+
+<form action="/i18n/setlang/" method="POST" id="lang">{% csrf_token %}
+<select name="language" onchange="this.form.submit();">
+{% for lang in LANGUAGES %}
+<option value="{{ lang.0 }}"{% ifequal lang.0 LANGUAGE_CODE %} selected{% endifequal %}>{{ lang.1 }}</option>
+{% endfor %}
+</select>
+<noscript><input type="submit"></noscript>
+</form>
+
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

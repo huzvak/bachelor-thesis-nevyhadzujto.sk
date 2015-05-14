@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<div id="inzerat_profil">
+
+		<span id="addthis">
+			<span>Zdieľajte inzerát:</span>
+			<!-- AddThis Button BEGIN -->
+			<div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+			<a class="addthis_button_facebook"></a>
+			<a class="addthis_button_twitter"></a>
+			<a class="addthis_button_google"></a>
+			<a class="addthis_button_email"></a>
+			<a class="addthis_button_favorites"></a>
+			<a class="addthis_counter addthis_bubble_style"></a>
+			</div>
+			<!-- AddThis Button END -->
+		</span>
+
+		{% if news %}
+		{% for new in news %}
+		<h1>{{ new.title }}</h1>
+		<div id="kde_som">
+			<a href="/">Domov</a> >> <a href="#">Detail novinky: {{ new.title }}</a>
+		</div>
+
+		<div id="text">
+			<span id="nadpis">
+				Novinka - {{ new.title }}</span>
+
+			<p>{{ new.text }}
+			</p>
+
+			<span class="info" id="auth">
+				Vložené
+				<span>{{ new.time_of_publication }}</span>
+			</span>
+			
+		</div>
+		{% endfor %}
+		{% endif %}
+
+	</div>
+
+	<div id="inzerat_navigation">
+		{% if previousNew %}
+			<a is="prev" class="button purple" href="/detail-novinky/{{ previousNew.title_url }}/">&lt; Predchádzajúci</a>
+		{% else %}
+			<div is="prev" class="button purple">Staršia novinka neexistuje</div>
+		{% endif %}
+		{% if nextNew %}
+			<a id="next" class="button purple" href="/detail-novinky/{{ nextNew.title_url }}/">Nasledujúci &gt;</a>
+		{% else %}
+			<div id="next" class="button purple">Novšia novinka neexistuje</div>
+		{% endif %}
+	</div>
+
+	{% if news %}
+	{% for new in news %}
+	<div id="i_forum">
+		<span class="heading">Diskusia k novinke</span>
+		<p>
+		<div class="fb-comments" data-href="https://www.nevyhazdujto.sk/detail-novinky/{{ new.title_url }}" data-num-posts="10" data-width="600"></div>
+		</p>
+	</div>
+	{% endfor %}
+	{% endif %}
+
+
+{% endblock %}
